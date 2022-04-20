@@ -148,7 +148,7 @@ namespace WebShop
             comm.CommandText = "dbo.Artikal_Insert";
             /* ----------------------- Parametri konekcije ------------------------ */
 
-            comm.Parameters.Add(new SqlParameter("@ime", SqlDbType.NVarChar, 100, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, ime));
+            comm.Parameters.Add(new SqlParameter("@ime", SqlDbType.NVarChar, 255, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, ime));
             comm.Parameters.Add(new SqlParameter("@cena", SqlDbType.Int, 8, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, cena));
             comm.Parameters.Add(new SqlParameter("@statusArtikla_id", SqlDbType.Int, 4, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, statusArtikla));
             comm.Parameters.Add(new SqlParameter("@kategorija_id", SqlDbType.Int, 4, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, kategorija));
