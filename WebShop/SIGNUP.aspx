@@ -22,7 +22,7 @@
             Opstina: <asp:TextBox ID="txtopstina" runat="server" ></asp:TextBox><br />
             Postanski broj:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="txtpostabroj" runat="server" TextMode="Number"></asp:TextBox><br />
             Adresa:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="txtadresa" runat="server" ></asp:TextBox><br />
-            Tip korisnika:(1 ili 0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="txttip" Text="" Enabled="true" runat="server" ></asp:TextBox><br />
+            Tip korisnika:(1 - admin ili 2 - ne)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="txttip" Text="" Enabled="true" runat="server" ></asp:TextBox><br />
             Pol:(Musko ili Zensko)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="txtpol" Text="" Enabled="true" runat="server" ></asp:TextBox><br />
             <br />
             <asp:Button ID="Button1" runat="server" Text="SIGN UP ME" OnClick="Button1_Click" />
