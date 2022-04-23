@@ -13,7 +13,7 @@ magacin int
 
 Create table Kategorija (
 kategorija_id int Primary Key identity(1,1),
-kategorija_ime nvarchar(100)
+kategorija_ime nvarchar(100) unique
 )
 
 Create table StatusArtikla (
@@ -50,13 +50,14 @@ tip_korisnik_id int,
 pol nvarchar(10) not null check (pol in('Musko', 'Zensko'))
 )
 
-
 Create table TipKorisnik (
 tip_korisnik_id int Primary Key identity(1,1),
 is_administrator BIT DEFAULT (0)
 )
 
+
 /*-------------------------------------------------*/
+
 
 ALTER table Artikal
 add constraint FK_statusArtikla_id
@@ -67,12 +68,12 @@ ALTER table Artikal
 add constraint FK_kategorija_id
 FOREIGN KEY (kategorija_id)
 REFERENCES Kategorija(kategorija_id);
-
+/*
 ALTER table Artikal
 add constraint FK_slika_id
 FOREIGN KEY (ime)
 REFERENCES Slika(slika_id);
-
+*/
 ALTER table Porudzbina
 add constraint FK_korisnik_id
 FOREIGN KEY (korisnik_id)
@@ -102,6 +103,28 @@ BEGIN TRY
 	Insert Into TipKorisnik(is_administrator)
 	Values(0)
 		RETURN SCOPE_IDENTITY()
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+GO
+Create PROC TipKorisnik_Update
+@email nvarchar(255),
+@is_administrator BIT 
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS (SELECT TOP 1 email FROM Korisnik
+	WHERE email = @email )
+	BEGIN
+	DECLARE @tip_korisnik_id INT
+	select @tip_korisnik_id = tip_korisnik_id from Korisnik where email = @email
+	Update TipKorisnik Set is_administrator = @is_administrator where tip_korisnik_id = @tip_korisnik_id
+		RETURN 0;
+	END
+	RETURN 1;
 END TRY
 BEGIN CATCH
 	RETURN @@ERROR;
@@ -142,7 +165,6 @@ GO
 
 GO
 Create PROC Korisnik_Update
-@korisnik_id int,
 @ime_korisnik nvarchar(100),
 @prezime_korisnik nvarchar(100),
 @lozinka_hash nvarchar(255),
@@ -152,19 +174,14 @@ Create PROC Korisnik_Update
 @opstina nvarchar(100),
 @postanski_br int,
 @adresa nvarchar(255),
-@is_administrator BIT,
 @pol nvarchar(10)
 AS
 SET LOCK_TIMEOUT 3000;
 BEGIN TRY
 	IF EXISTS (SELECT TOP 1 ime_korisnik FROM Korisnik
-	WHERE korisnik_id = @korisnik_id)
-
+	WHERE email = @email)
 	BEGIN
-	DECLARE @tip_korisnik_id INT
-	select @tip_korisnik_id = tip_korisnik_id from Korisnik where korisnik_id = @korisnik_id
-	Update Korisnik Set ime_korisnik=@ime_korisnik, prezime_korisnik=@prezime_korisnik, lozinka_hash=@lozinka_hash, email=@email, @drzava=@drzava, grad=@grad, opstina=@opstina, postanski_br=@postanski_br, adresa=@adresa, pol=@pol where korisnik_id = @korisnik_id
-	Update TipKorisnik Set is_administrator=@is_administrator where tip_korisnik_id = @tip_korisnik_id
+	Update Korisnik Set ime_korisnik=@ime_korisnik, prezime_korisnik=@prezime_korisnik, lozinka_hash=@lozinka_hash, email=@email, drzava=@drzava, grad=@grad, opstina=@opstina, postanski_br=@postanski_br, adresa=@adresa, pol=@pol where email = @email
 		RETURN 0;
 	END
 	RETURN 1;
@@ -176,13 +193,206 @@ GO
 
 Go
 Create Proc Korisnik_Delete
-@korisnik_id int
+@email nvarchar(255)
 as
 Begin TRY
 DECLARE @tip_korisnik_id INT
-select @tip_korisnik_id = tip_korisnik_id from Korisnik where korisnik_id = @korisnik_id
-Delete from Korisnik where korisnik_id = @korisnik_id
+select @tip_korisnik_id = tip_korisnik_id from Korisnik where email = @email
+Delete from Korisnik where email = @email
 Delete from TipKorisnik where tip_korisnik_id = @tip_korisnik_id
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+Go
+
+/*----------StatusArtikla----------*/
+
+GO
+CREATE PROC StatusArtikla_Insert
+@is_vidljivo BIT
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	Insert Into StatusArtikla(is_vidljivo)
+	Values(@is_vidljivo)
+		RETURN SCOPE_IDENTITY();
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+GO
+Create PROC StatusArtikla_Update
+@artikal_id int,
+@is_vidljivo BIT
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS (SELECT TOP 1 artikal_id FROM Artikal
+	WHERE artikal_id = @artikal_id)
+	BEGIN
+	DECLARE @statusArtikla_id INT
+	SELECT @statusArtikla_id = statusArtikla_id FROM Artikal WHERE artikal_id = @artikal_id
+	Update StatusArtikla Set is_vidljivo = @is_vidljivo where statusArtikla_id = @statusArtikla_id
+		RETURN 0;
+	END
+	RETURN 1;
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+/*----------Kategorija----------*/
+
+GO
+CREATE PROC Kategorija_Insert
+@kategorija_ime nvarchar(100)
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS(SELECT TOP 1 kategorija_ime FROM Kategorija
+	WHERE kategorija_ime = @kategorija_ime)
+	Return 1
+	else
+	Insert Into Kategorija(kategorija_ime)
+	Values(@kategorija_ime)
+		RETURN 0;
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+GO
+Create PROC Kategorija_Update
+@kategorija_id int,
+@kategorija_ime nvarchar(100)
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS (SELECT TOP 1 kategorija_ime FROM Kategorija
+	WHERE kategorija_id = @kategorija_id)
+	BEGIN
+	Update Kategorija Set kategorija_ime = @kategorija_ime where kategorija_id = @kategorija_id
+		RETURN 0;
+	END
+	RETURN 1;
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+Go
+Create Proc Kategorija_Delete
+@kategorija_id int,
+@kategorija_ime nvarchar(100)
+AS
+Begin TRY
+DELETE FROM Kategorija WHERE kategorija_ime = @kategorija_ime AND kategorija_id = @kategorija_id
+RETURN 0
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+/*----------Slika----------*/
+
+/*
+GO
+CREATE PROC Slika_Insert
+@slika_ref NVARCHAR(150)
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS(SELECT TOP 1 slika_ref FROM Slika
+	WHERE slika_ref = @slika_ref)
+	RETURN 1
+	ELSE
+	INSERT INTO Slika(slika_ref)
+	VALUES(@slika_ref)
+		RETURN SCOPE_IDENTITY();
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+*/
+
+/*----------Artikal----------*/
+
+GO
+Create PROC Artikal_Insert
+@ime nvarchar(255),
+@cena int,
+@is_vidljivo int,
+@kategorija_ime nvarchar(100),
+@opis nvarchar(250),
+@magacin int
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS(SELECT TOP 1 ime FROM Artikal
+	WHERE ime = @ime)
+	Return 1
+	else
+	DECLARE @kategorija_id INT
+	SELECT @kategorija_id = kategorija_id FROM Kategorija WHERE kategorija_ime = @kategorija_ime
+	DECLARE @statusArtikla_id INT
+	EXEC @statusArtikla_id = StatusArtikla_Insert @is_vidljivo
+	Insert Into Artikal(ime, cena, statusArtikla_id, kategorija_id, opis, magacin)
+	Values(@ime, @cena, @statusArtikla_id, @kategorija_id, @opis, @magacin)
+		RETURN 0;
+END TRY
+	
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+GO
+Create PROC Arikal_Update
+@artikal_id int,
+@ime nvarchar(255),
+@cena int,
+@is_vidljivo int,
+@kategorija_id int,
+@opis nvarchar(250),
+@magacin int
+AS
+SET LOCK_TIMEOUT 3000;
+
+BEGIN TRY
+	IF EXISTS (SELECT TOP 1 ime FROM Artikal
+	WHERE artikal_id = @artikal_id )
+	BEGIN
+	DECLARE @statusArtikla_id INT
+	SELECT @statusArtikla_id = statusArtikla_id FROM Artikal where artikal_id = @artikal_id
+	Update StatusArtikla set is_vidljivo = @is_vidljivo where statusArtikla_id = @statusArtikla_id
+	Update Artikal Set ime=@ime, cena=@cena, kategorija_id=@kategorija_id , opis=@opis, magacin=@magacin where artikal_id=@artikal_id
+		RETURN 0;
+	END
+	RETURN 1;
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+GO
+CREATE PROC Artikal_Delete
+@artikal_id INT
+AS
+BEGIN TRY
+	DECLARE @statusArtikla_id INT
+	SELECT @statusArtikla_id = statusArtikla_id FROM Artikal WHERE artikal_id = @artikal_id
+	DELETE FROM Artikal WHERE artikal_id=@artikal_id
+	DELETE FROM StatusArtikla WHERE statusArtikla_id = @statusArtikla_id
+	RETURN 0
 END TRY
 BEGIN CATCH
 	RETURN @@ERROR;
