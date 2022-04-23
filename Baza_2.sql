@@ -50,13 +50,14 @@ tip_korisnik_id int,
 pol nvarchar(10) not null check (pol in('Musko', 'Zensko'))
 )
 
-
 Create table TipKorisnik (
 tip_korisnik_id int Primary Key identity(1,1),
 is_administrator BIT DEFAULT (0)
 )
 
+
 /*-------------------------------------------------*/
+
 
 ALTER table Artikal
 add constraint FK_statusArtikla_id
@@ -204,3 +205,23 @@ BEGIN CATCH
 	RETURN @@ERROR;
 END CATCH
 Go
+
+/*----------StatusArtikla----------*/
+
+GO
+CREATE PROC StatusArtikla_Insert
+@is_vidljivo BIT
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	Insert Into StatusArtikla(is_vidljivo)
+	Values(@is_vidljivo)
+		RETURN SCOPE_IDENTITY();
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+/*----------Artikal----------*/
+
