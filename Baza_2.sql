@@ -68,12 +68,12 @@ ALTER table Artikal
 add constraint FK_kategorija_id
 FOREIGN KEY (kategorija_id)
 REFERENCES Kategorija(kategorija_id);
-
+/*
 ALTER table Artikal
 add constraint FK_slika_id
 FOREIGN KEY (ime)
 REFERENCES Slika(slika_id);
-
+*/
 ALTER table Porudzbina
 add constraint FK_korisnik_id
 FOREIGN KEY (korisnik_id)
@@ -272,7 +272,7 @@ Create PROC Artikal_Insert
 @ime nvarchar(255),
 @cena int,
 @is_vidljivo int,
-@kategorija_ime int,
+@kategorija_ime nvarchar(100),
 @opis nvarchar(250),
 @magacin int
 AS
