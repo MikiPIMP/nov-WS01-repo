@@ -267,3 +267,31 @@ GO
 
 /*----------Artikal----------*/
 
+GO
+Create PROC Artikal_Insert
+@ime nvarchar(255),
+@cena int,
+@is_vidljivo int,
+@kategorija_ime int,
+@opis nvarchar(250),
+@magacin int
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS(SELECT TOP 1 ime FROM Artikal
+	WHERE ime = @ime and magacin = @magacin)
+	Return 1
+	else
+	DECLARE @kategorija_id INT
+	SELECT @kategorija_id = kategorija_id FROM Kategorija WHERE kategorija_ime = @kategorija_ime
+	DECLARE @statusArtikla_id INT
+	EXEC @statusArtikla_id = StatusArtikla_Insert @is_vidljivo
+	Insert Into Artikal(ime, cena, statusArtikla_id, kategorija_id, opis, magacin)
+	Values(@ime, @cena, @statusArtikla_id, @kategorija_id, @opis, @magacin)
+		RETURN 0;
+END TRY
+	
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
