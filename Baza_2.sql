@@ -13,7 +13,7 @@ magacin int
 
 Create table Kategorija (
 kategorija_id int Primary Key identity(1,1),
-kategorija_ime nvarchar(100)
+kategorija_ime nvarchar(100) unique
 )
 
 Create table StatusArtikla (
@@ -222,6 +222,28 @@ BEGIN CATCH
 	RETURN @@ERROR;
 END CATCH
 GO
+
+/*----------Kategorija----------*/
+
+GO
+CREATE PROC Kategorija_Insert
+@kategorija_ime nvarchar(100)
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS(SELECT TOP 1 kategorija_ime FROM Kategorija
+	WHERE kategorija_ime = @kategorija_ime)
+	Return 1
+	else
+	Insert Into Kategorija(kategorija_ime)
+	Values(@kategorija_ime)
+		RETURN 0;
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
 
 /*----------Artikal----------*/
 
