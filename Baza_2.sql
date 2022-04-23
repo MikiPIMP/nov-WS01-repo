@@ -108,6 +108,28 @@ BEGIN CATCH
 END CATCH
 GO
 
+GO
+Create PROC TipKorisnik_Update
+@email nvarchar(255),
+@is_administrator BIT 
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS (SELECT TOP 1 email FROM Korisnik
+	WHERE email = @email )
+	BEGIN
+	DECLARE @tip_korisnik_id INT
+	select @tip_korisnik_id = tip_korisnik_id from Korisnik where email = @email
+	Update TipKorisnik Set is_administrator = @is_administrator where tip_korisnik_id = @tip_korisnik_id
+		RETURN 0;
+	END
+	RETURN 1;
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
 /*----------Korisnik----------*/
 
 GO
