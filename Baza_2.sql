@@ -337,7 +337,7 @@ AS
 SET LOCK_TIMEOUT 3000;
 BEGIN TRY
 	IF EXISTS(SELECT TOP 1 ime FROM Artikal
-	WHERE ime = @ime and magacin = @magacin)
+	WHERE ime = @ime)
 	Return 1
 	else
 	DECLARE @kategorija_id INT
@@ -349,6 +349,51 @@ BEGIN TRY
 		RETURN 0;
 END TRY
 	
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+GO
+Create PROC Arikal_Update
+@artikal_id int,
+@ime nvarchar(255),
+@cena int,
+@is_vidljivo int,
+@kategorija_id int,
+@opis nvarchar(250),
+@magacin int
+AS
+SET LOCK_TIMEOUT 3000;
+
+BEGIN TRY
+	IF EXISTS (SELECT TOP 1 ime FROM Artikal
+	WHERE artikal_id = @artikal_id )
+	BEGIN
+	DECLARE @statusArtikla_id INT
+	SELECT @statusArtikla_id = statusArtikla_id FROM Artikal where artikal_id = @artikal_id
+	Update StatusArtikla set is_vidljivo = @is_vidljivo where statusArtikla_id = @statusArtikla_id
+	Update Artikal Set ime=@ime, cena=@cena, kategorija_id=@kategorija_id , opis=@opis, magacin=@magacin where artikal_id=@artikal_id
+		RETURN 0;
+	END
+	RETURN 1;
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+GO
+CREATE PROC Artikal_Delete
+@artikal_id INT
+AS
+BEGIN TRY
+	DECLARE @statusArtikla_id INT
+	SELECT @statusArtikla_id = statusArtikla_id FROM Artikal WHERE artikal_id = @artikal_id
+	DELETE FROM Artikal WHERE artikal_id=@artikal_id
+	DELETE FROM StatusArtikla WHERE statusArtikla_id = @statusArtikla_id
+	RETURN 0
+END TRY
 BEGIN CATCH
 	RETURN @@ERROR;
 END CATCH
