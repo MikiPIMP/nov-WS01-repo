@@ -266,8 +266,43 @@ BEGIN CATCH
 END CATCH
 GO
 
+GO
+Create PROC Kategorija_Update
+@kategorija_id int,
+@kategorija_ime nvarchar(100)
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS (SELECT TOP 1 kategorija_ime FROM Kategorija
+	WHERE kategorija_id = @kategorija_id)
+	BEGIN
+	Update Kategorija Set kategorija_ime = @kategorija_ime where kategorija_id = @kategorija_id
+		RETURN 0;
+	END
+	RETURN 1;
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
+Go
+Create Proc Kategorija_Delete
+@kategorija_id int,
+@kategorija_ime nvarchar(100)
+AS
+Begin TRY
+DELETE FROM Kategorija WHERE kategorija_ime = @kategorija_ime AND kategorija_id = @kategorija_id
+RETURN 0
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
 /*----------Slika----------*/
 
+/*
 GO
 CREATE PROC Slika_Insert
 @slika_ref NVARCHAR(150)
@@ -286,6 +321,7 @@ BEGIN CATCH
 	RETURN @@ERROR;
 END CATCH
 GO
+*/
 
 /*----------Artikal----------*/
 
