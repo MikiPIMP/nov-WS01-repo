@@ -142,7 +142,6 @@ GO
 
 GO
 Create PROC Korisnik_Update
-@korisnik_id int,
 @ime_korisnik nvarchar(100),
 @prezime_korisnik nvarchar(100),
 @lozinka_hash nvarchar(255),
@@ -152,19 +151,14 @@ Create PROC Korisnik_Update
 @opstina nvarchar(100),
 @postanski_br int,
 @adresa nvarchar(255),
-@is_administrator BIT,
 @pol nvarchar(10)
 AS
 SET LOCK_TIMEOUT 3000;
 BEGIN TRY
 	IF EXISTS (SELECT TOP 1 ime_korisnik FROM Korisnik
-	WHERE korisnik_id = @korisnik_id)
-
+	WHERE email = @email)
 	BEGIN
-	DECLARE @tip_korisnik_id INT
-	select @tip_korisnik_id = tip_korisnik_id from Korisnik where korisnik_id = @korisnik_id
-	Update Korisnik Set ime_korisnik=@ime_korisnik, prezime_korisnik=@prezime_korisnik, lozinka_hash=@lozinka_hash, email=@email, @drzava=@drzava, grad=@grad, opstina=@opstina, postanski_br=@postanski_br, adresa=@adresa, pol=@pol where korisnik_id = @korisnik_id
-	Update TipKorisnik Set is_administrator=@is_administrator where tip_korisnik_id = @tip_korisnik_id
+	Update Korisnik Set ime_korisnik=@ime_korisnik, prezime_korisnik=@prezime_korisnik, lozinka_hash=@lozinka_hash, email=@email, drzava=@drzava, grad=@grad, opstina=@opstina, postanski_br=@postanski_br, adresa=@adresa, pol=@pol where email = @email
 		RETURN 0;
 	END
 	RETURN 1;
