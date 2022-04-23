@@ -176,15 +176,15 @@ GO
 
 Go
 Create Proc Korisnik_Delete
-@korisnik_id int
+@email nvarchar(255)
 as
 Begin TRY
 DECLARE @tip_korisnik_id INT
-select @tip_korisnik_id = tip_korisnik_id from Korisnik where korisnik_id = @korisnik_id
-Delete from Korisnik where korisnik_id = @korisnik_id
+select @tip_korisnik_id = tip_korisnik_id from Korisnik where email = @email
+Delete from Korisnik where email = @email
 Delete from TipKorisnik where tip_korisnik_id = @tip_korisnik_id
 END TRY
 BEGIN CATCH
 	RETURN @@ERROR;
 END CATCH
-GO
+Go
