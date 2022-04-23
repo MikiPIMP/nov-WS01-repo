@@ -244,6 +244,26 @@ BEGIN CATCH
 END CATCH
 GO
 
+/*----------Slika----------*/
+
+GO
+CREATE PROC Slika_Insert
+@slika_ref NVARCHAR(150)
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS(SELECT TOP 1 slika_ref FROM Slika
+	WHERE slika_ref = @slika_ref)
+	RETURN 1
+	ELSE
+	INSERT INTO Slika(slika_ref)
+	VALUES(@slika_ref)
+		RETURN SCOPE_IDENTITY();
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
 
 /*----------Artikal----------*/
 
