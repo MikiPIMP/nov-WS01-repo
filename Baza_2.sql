@@ -223,6 +223,28 @@ BEGIN CATCH
 END CATCH
 GO
 
+GO
+Create PROC StatusArtikla_Update
+@artikal_id int,
+@is_vidljivo BIT
+AS
+SET LOCK_TIMEOUT 3000;
+BEGIN TRY
+	IF EXISTS (SELECT TOP 1 artikal_id FROM Artikal
+	WHERE artikal_id = @artikal_id)
+	BEGIN
+	DECLARE @statusArtikla_id INT
+	SELECT @statusArtikla_id = statusArtikla_id FROM Artikal WHERE artikal_id = @artikal_id
+	Update StatusArtikla Set is_vidljivo = @is_vidljivo where statusArtikla_id = @statusArtikla_id
+		RETURN 0;
+	END
+	RETURN 1;
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR;
+END CATCH
+GO
+
 /*----------Kategorija----------*/
 
 GO
