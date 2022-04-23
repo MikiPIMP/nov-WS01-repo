@@ -398,3 +398,31 @@ BEGIN CATCH
 	RETURN @@ERROR;
 END CATCH
 GO
+
+/*----------Login----------*/
+
+GO
+CREATE PROC Korisnik_Login
+@email NVARCHAR(255),
+@lozinka_hash NVARCHAR(255)
+AS
+BEGIN TRY	
+	IF EXISTS(SELECT TOP 1 email, lozinka_hash FROM Korisnik
+	WHERE email = @email AND lozinka_hash = @lozinka_hash)
+	BEGIN
+		DECLARE @is_admin BIT
+		DECLARE @tip_korisnik_id INT
+		SELECT @tip_korisnik_id = tip_korisnik_id FROM Korisnik WHERE email = @email
+		SELECT @is_admin = is_administrator FROM TipKorisnik WHERE tip_korisnik_id = @tip_korisnik_id
+		IF(@is_admin = 0)
+		BEGIN
+			RETURN 0
+		END
+		RETURN 2
+	END
+	RETURN 1
+END TRY
+BEGIN CATCH
+	RETURN @@ERROR
+END CATCH
+GO
