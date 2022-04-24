@@ -16,7 +16,7 @@
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>44337</IISExpressSSLPort>
+    <IISExpressSSLPort>44337</IISExpressSSLPort>    <!--I Ovde moze da se menja port-->
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -70,6 +70,7 @@
     <Content Include="control_panel.aspx" />
     <Content Include="Global.asax" />
     <Content Include="LibForFrontEndSite\css\site1.css" />
+	<Content Include="LibForFrontEndSite\html\index.html" />   <!--Ovo sam dodao rucno, nije htelo automatski-->
     <Content Include="LibForFrontEndSite\js\site1.js" />
     <Content Include="LOGIN.aspx" />
     <Content Include="LOGIN_ADMIN.aspx" />
