@@ -14,7 +14,7 @@ namespace WebShop
             webshop x = new webshop();
         }
 
-        protected void Button1_Click(object sender, EventArgs e)  // OVDE IMA LOGICKA GRESKA
+        protected void Button1_Click(object sender, EventArgs e)  // OVDE IMA bag
         {                                                         // Vratiti se i ispraviti to
             webshop x = new webshop();
             int rezultat;
@@ -24,7 +24,7 @@ namespace WebShop
             {
                 Response.Write("Niste ADMIN!");
             }
-            else if (rezultat == 0)  // ovde prima svakog, nevezano da li je 1 ili 2 po tipKorID
+            else if (rezultat == 0)  // ovde prima svakog, nevezano da li je 1 ili 2 po tipKorID, to je bag
             {
                 Session["Korisnik_Email_Admin"] = TextBox1.Text;      // BILO: txtime.Text
                 Response.Redirect("control_panel.aspx");

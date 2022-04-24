@@ -3,20 +3,12 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head runat="server">
-    <title></title>
-    <style type="text/css">
-        #File1 {
-            width: 250px;
-        }
-        #TextArea1 {
-            height: 90px;
-            width: 211px;
-        }
-    </style>
+    <title>LOGIN</title>
 </head>
+
 <body>
-    
     <form id="form1" runat="server">
         <div>LOG IN za korisnike: <br /><br />
             Email:&nbsp;&nbsp;&nbsp;&nbsp; <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox> <br />
@@ -31,4 +23,5 @@
         <br />
     </form>
 </body>
+
 </html>
