@@ -9,7 +9,7 @@ using System.Data;
 namespace WebShop
 {
 
-    public class webshop {      /* MM: radio u 17h, 23.04.2022. */
+    public class webshop {      /* MM: radio u 17h, 24.04.2022. */
 
         SqlConnection conn = new SqlConnection();
         string wqbConfig = ConfigurationManager.ConnectionStrings["WebShop"].ConnectionString;

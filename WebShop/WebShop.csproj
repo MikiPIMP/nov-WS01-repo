@@ -69,7 +69,6 @@
   <ItemGroup>
     <Content Include="control_panel.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="index.html" />
     <Content Include="LibForFrontEndSite\css\site1.css" />
     <Content Include="LibForFrontEndSite\js\site1.js" />
     <Content Include="LOGIN.aspx" />
