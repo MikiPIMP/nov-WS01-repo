@@ -26,7 +26,6 @@ namespace WebShop
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
                 {
-
                     Response.Write(ds.Tables[0].Rows[i]["ime_korisnik"]);
                     Response.Write("<br>");
 
