@@ -13,8 +13,27 @@
 
     <body>
         <form id="form1" runat="server">
-            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
-            </asp:ContentPlaceHolder>
+            <div style="height: 100vh; width: 100vw; ">
+                <div style="border: 2px solid #000000; width: 100vw; height: 60px;">
+                    <h4>Heder</h4>
+                    <br />
+                </div>
+
+                <div style="border: 1px solid #000000; width: 100vw; height: 620px">
+                    <div style="width: 20%; height: 620px; float: left">
+                        <h4>Horizonatalni meni</h4>
+                    </div>
+                    <div style="width: 80%; height: 620px; float: right">
+                        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </div>
+                </div>
+
+                <div style="border: 1px solid #000000; width: 100vw; height: 60px; margin-top: 0px;">
+                    <br />
+                    <h4>futer</h4>
+                </div>
+            </div>
         </form>
     </body>
 </html>

@@ -30,10 +30,6 @@
             <br />
         </div>
           <hr color="red" />
-        <div>
-            <asp:Button ID="Button2" runat="server" Text="Prikaz Svih korisnika" OnClick="Button2_Click" />
-            <hr color="red" />
-        </div>
         </div>
     </form>
 </body>
