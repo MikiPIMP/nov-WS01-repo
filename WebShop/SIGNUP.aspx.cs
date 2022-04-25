@@ -17,18 +17,17 @@ namespace WebShop
         protected void Button1_Click(object sender, EventArgs e) {   //NA DUGME: SIGN UP ME
             webshop obj = new webshop();
             int rez;
-            rez = obj.Upis_Korisnika(txtime.Text, txtprezime.Text, txtlozinka.Text, txtemail.Text,
+            rez = obj.Upis_Korisnika(txtime.Text, txtprezime.Text, txtemail.Text, txtlozinka.Text,
                                      txtdrzava.Text, txtgrad.Text, txtopstina.Text,
-                                     Convert.ToInt32(txtpostabroj.Text), txtadresa.Text,
-                                     Convert.ToInt32(txttip.Text), txtpol.Text);
+                                     Convert.ToInt32(txtpostabroj.Text), txtadresa.Text, txtpol.Text);
 
-            if (rez != 0) { // 1
-                Response.Write("Ponovite upis!");
-            }
-            else { // 0
+            if (rez == 0) {
                 Session["Korisnik_Email"] = txtime.Text;
-                Response.Write("Upis je okej!");
+                Response.Write("Registracija uspesna!");
                 Response.Redirect("HomePage.aspx");
+            }
+            else {
+                Response.Write("Ponovite upis!");
             }
 
         }
