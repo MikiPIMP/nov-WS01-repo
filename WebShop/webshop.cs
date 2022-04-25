@@ -21,14 +21,12 @@ namespace WebShop
         public int Provera_Korisnika(string email, string lozinka) {
 
             conn.ConnectionString = wqbConfig;
-            int rezultat;
-
             comm.Connection = conn;
             comm.CommandType = CommandType.StoredProcedure;
-            comm.CommandText = "dbo.Korisnik_Email_Admin";
+            comm.CommandText = "dbo.Korisnik_Login";
             // kolekcija Parameters
             comm.Parameters.Add(new SqlParameter("@email", SqlDbType.NVarChar, 50, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, email));
-            comm.Parameters.Add(new SqlParameter("@loz", SqlDbType.NVarChar, 50, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, lozinka));
+            comm.Parameters.Add(new SqlParameter("@lozinka_hash", SqlDbType.NVarChar, 50, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, lozinka));
             comm.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Int, 4, ParameterDirection.ReturnValue, true, 0, 0, "", DataRowVersion.Current, null));
 
             conn.Open();
@@ -38,12 +36,7 @@ namespace WebShop
             int Ret;
             Ret = (int)comm.Parameters["@RETURN_VALUE"].Value;
 
-            if (Ret == 0) {
-                rezultat = 0;
-            } else {
-                rezultat = 1;
-            }
-            return rezultat;
+            return Ret;
         }
 
 
