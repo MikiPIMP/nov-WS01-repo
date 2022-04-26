@@ -105,15 +105,6 @@ namespace WebShop
         protected global::System.Web.UI.WebControls.TextBox txtadresa;
 
         /// <summary>
-        /// txttip control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txttip;
-
-        /// <summary>
         /// txtpol control.
         /// </summary>
         /// <remarks>

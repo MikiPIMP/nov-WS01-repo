@@ -21,14 +21,12 @@ namespace WebShop
         public int Provera_Korisnika(string email, string lozinka) {
 
             conn.ConnectionString = wqbConfig;
-            int rezultat;
-
             comm.Connection = conn;
             comm.CommandType = CommandType.StoredProcedure;
-            comm.CommandText = "dbo.Korisnik_Email_Admin";
-            // kolekcija Parameters
+            comm.CommandText = "dbo.Korisnik_Login";
+
             comm.Parameters.Add(new SqlParameter("@email", SqlDbType.NVarChar, 50, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, email));
-            comm.Parameters.Add(new SqlParameter("@loz", SqlDbType.NVarChar, 50, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, lozinka));
+            comm.Parameters.Add(new SqlParameter("@lozinka_hash", SqlDbType.NVarChar, 50, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, lozinka));
             comm.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Int, 4, ParameterDirection.ReturnValue, true, 0, 0, "", DataRowVersion.Current, null));
 
             conn.Open();
@@ -38,20 +36,13 @@ namespace WebShop
             int Ret;
             Ret = (int)comm.Parameters["@RETURN_VALUE"].Value;
 
-            if (Ret == 0) {
-                rezultat = 0;
-            } else {
-                rezultat = 1;
-            }
-            return rezultat;
+            return Ret;
         }
 
 
-        public int Upis_Korisnika(string ime, string prezime, string lozinka,string email, string drzava,string grad,string opstina,int postanski_br,string adresa,int tipk,string pol) {
+        public int Upis_Korisnika(string ime, string prezime, string email, string lozinka, string drzava, string grad, string opstina, int postanski_br, string adresa, string pol) {
 
             conn.ConnectionString = wqbConfig;
-            int rezultat;
-
             comm.Connection = conn;
             comm.CommandType = CommandType.StoredProcedure;
             comm.CommandText = "dbo.Korisnik_Insert";
@@ -65,9 +56,7 @@ namespace WebShop
             comm.Parameters.Add(new SqlParameter("@opstina", SqlDbType.NVarChar, 100, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, opstina));
             comm.Parameters.Add(new SqlParameter("@postanski_br", SqlDbType.Int, 4, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, postanski_br));
             comm.Parameters.Add(new SqlParameter("@adresa", SqlDbType.NVarChar, 255, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, adresa));
-            comm.Parameters.Add(new SqlParameter("@tip_korisnik_id", SqlDbType.Int, 4, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, tipk));
             comm.Parameters.Add(new SqlParameter("@pol", SqlDbType.NVarChar, 10, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, pol));
-
             comm.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Int, 4, ParameterDirection.ReturnValue, true, 0, 0, "", DataRowVersion.Current, null));
 
             conn.Open();
@@ -77,14 +66,9 @@ namespace WebShop
             int Ret;
             Ret = (int)comm.Parameters["@RETURN_VALUE"].Value;
 
-            if (Ret == 0) {
-                rezultat = 0;
-            } else {
-                rezultat = 1;
-            }
-            return rezultat;
+            return Ret;
         }
-
+        
         public DataSet Korisnici_Svi() {
 
             conn.ConnectionString = wqbConfig;
@@ -103,8 +87,7 @@ namespace WebShop
             }
             return (ds);
         }
-
-
+        
         /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
         /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
