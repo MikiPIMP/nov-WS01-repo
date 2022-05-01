@@ -809,13 +809,13 @@ exec StatusArtikla_Svi
 exec TipKorisnik_Svi
 
 
-exec Korisnik_Insert 'Milan','Minic','12345','milan.minic@prvabeogim','Srbija','Beograd','Stari grad',11000,'Bul desp Stef', 1,'Musko'
+exec Korisnik_Insert 'Milan','Minic','12345','milan.minic@prvabeogim.edu.rs','Srbija','Beograd','Stari grad',11000,'Bul desp Stef', 1,'Musko'
 
-exec Korisnik_Insert 'Ognjen','Bozic','12345','ognjen.bozic@prvabeogim','Srbija','Beograd','Stari grad',11000,'NBGD', 2,'Musko'
+exec Korisnik_Insert 'Ognjen','Bozic','12345','ognjen.bozic@prvabeogim.edu.rs','Srbija','Beograd','Stari grad',11000,'NBGD', 2,'Musko'
 
-exec Korisnik_Insert 'Dunja','Bozinovic','12345','dunja.bozinovic@prvabeogim','Srbija','Beograd','Stari grad',11000,'Bul desp Stef', 2,'Zensko'
+exec Korisnik_Insert 'Dunja','Bozinovic','12345','dunja.bozinovic@prvabeogim.edu.rs','Srbija','Beograd','Stari grad',11000,'Bul desp Stef', 2,'Zensko'
 
-exec Korisnik_Insert 'Ilija','Popovic','12345','ilija.popovic@prvabeogim','Srbija','Beograd','Stari grad',11000,'NBGD', 1,'Musko'
+exec Korisnik_Insert 'Ilija','Popovic','12345','ilija.popovic@prvabeogim.edu.rs','Srbija','Beograd','Stari grad',11000,'NBGD', 1,'Musko'
 
 
 exec Porudzbina_Svi
