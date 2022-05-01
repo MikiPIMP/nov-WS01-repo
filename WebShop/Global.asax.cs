@@ -17,7 +17,6 @@ namespace WebShop
 
         protected void Session_Start(object sender, EventArgs e)
         {
-            Session["Korisnik_Email_Admin"] = "";
             Session["Korisnik_Email"] = "";
         }
 

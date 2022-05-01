@@ -8,8 +8,7 @@ using System.Data;
 
 namespace WebShop
 {
-
-    public class webshop {      /* MM: Radio u 19h, 24.04.2022. */
+    public class webshop {
 
         SqlConnection conn = new SqlConnection();
         string wqbConfig = ConfigurationManager.ConnectionStrings["WebShop"].ConnectionString;
@@ -21,12 +20,14 @@ namespace WebShop
         public int Provera_Korisnika(string email, string lozinka) {
 
             conn.ConnectionString = wqbConfig;
+            int rezultat;
+
             comm.Connection = conn;
             comm.CommandType = CommandType.StoredProcedure;
-            comm.CommandText = "dbo.Korisnik_Login";
-
+            comm.CommandText = "dbo.Korisnik_Email";
+            // kolekcija Parameters
             comm.Parameters.Add(new SqlParameter("@email", SqlDbType.NVarChar, 50, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, email));
-            comm.Parameters.Add(new SqlParameter("@lozinka_hash", SqlDbType.NVarChar, 50, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, lozinka));
+            comm.Parameters.Add(new SqlParameter("@loz", SqlDbType.NVarChar, 50, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, lozinka));
             comm.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Int, 4, ParameterDirection.ReturnValue, true, 0, 0, "", DataRowVersion.Current, null));
 
             conn.Open();
@@ -36,13 +37,55 @@ namespace WebShop
             int Ret;
             Ret = (int)comm.Parameters["@RETURN_VALUE"].Value;
 
-            return Ret;
+            if (Ret == 0) {
+                rezultat = 0;
+            } else {
+                rezultat = 1;
+            }
+            return rezultat;
         }
 
 
-        public int Upis_Korisnika(string ime, string prezime, string email, string lozinka, string drzava, string grad, string opstina, int postanski_br, string adresa, string pol) {
+        public int Provera_Admin(string email, string lozinka)
+        {
 
             conn.ConnectionString = wqbConfig;
+            int rezultat;
+
+            comm.Connection = conn;
+            comm.CommandType = CommandType.StoredProcedure;
+            comm.CommandText = "dbo.Korisnik_Email_Admin";
+            // kolekcija Parameters
+            comm.Parameters.Add(new SqlParameter("@email", SqlDbType.NVarChar, 50, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, email));
+            comm.Parameters.Add(new SqlParameter("@loz", SqlDbType.NVarChar, 100, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, lozinka));
+            comm.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Int, 4, ParameterDirection.ReturnValue, true, 0, 0, "", DataRowVersion.Current, null));
+
+            conn.Open();
+            comm.ExecuteNonQuery();
+            conn.Close();
+
+            int Ret;
+            Ret = (int)comm.Parameters["@RETURN_VALUE"].Value;
+
+            if (Ret == 0)
+            {
+                rezultat = 0;
+            }
+            else
+            {
+                rezultat = 1;
+            }
+            return rezultat;
+        }
+
+
+
+
+        public int Upis_Korisnika(string ime, string prezime, string lozinka,string email, string drzava,string grad,string opstina,int postanski_br,string adresa,int tipk,string pol) {
+
+            conn.ConnectionString = wqbConfig;
+            int rezultat;
+
             comm.Connection = conn;
             comm.CommandType = CommandType.StoredProcedure;
             comm.CommandText = "dbo.Korisnik_Insert";
@@ -56,7 +99,9 @@ namespace WebShop
             comm.Parameters.Add(new SqlParameter("@opstina", SqlDbType.NVarChar, 100, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, opstina));
             comm.Parameters.Add(new SqlParameter("@postanski_br", SqlDbType.Int, 4, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, postanski_br));
             comm.Parameters.Add(new SqlParameter("@adresa", SqlDbType.NVarChar, 255, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, adresa));
+            comm.Parameters.Add(new SqlParameter("@tip_korisnik_id", SqlDbType.Int, 4, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, tipk));
             comm.Parameters.Add(new SqlParameter("@pol", SqlDbType.NVarChar, 10, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, pol));
+
             comm.Parameters.Add(new SqlParameter("@RETURN_VALUE", SqlDbType.Int, 4, ParameterDirection.ReturnValue, true, 0, 0, "", DataRowVersion.Current, null));
 
             conn.Open();
@@ -66,9 +111,14 @@ namespace WebShop
             int Ret;
             Ret = (int)comm.Parameters["@RETURN_VALUE"].Value;
 
-            return Ret;
+            if (Ret == 0) {
+                rezultat = 0;
+            } else {
+                rezultat = 1;
+            }
+            return rezultat;
         }
-        
+
         public DataSet Korisnici_Svi() {
 
             conn.ConnectionString = wqbConfig;
@@ -87,7 +137,8 @@ namespace WebShop
             }
             return (ds);
         }
-        
+
+
         /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
         /*----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -131,7 +182,7 @@ namespace WebShop
             comm.CommandText = "dbo.Artikal_Insert";
             /* ----------------------- Parametri konekcije ------------------------ */
 
-            comm.Parameters.Add(new SqlParameter("@ime", SqlDbType.NVarChar, 255, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, ime));
+            comm.Parameters.Add(new SqlParameter("@ime", SqlDbType.NVarChar, 100, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, ime));
             comm.Parameters.Add(new SqlParameter("@cena", SqlDbType.Int, 8, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, cena));
             comm.Parameters.Add(new SqlParameter("@statusArtikla_id", SqlDbType.Int, 4, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, statusArtikla));
             comm.Parameters.Add(new SqlParameter("@kategorija_id", SqlDbType.Int, 4, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Current, kategorija));

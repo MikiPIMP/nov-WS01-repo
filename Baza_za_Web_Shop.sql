@@ -143,7 +143,7 @@ SET LOCK_TIMEOUT 3000;
 BEGIN TRY
 	IF EXISTS(SELECT TOP 1 email FROM Korisnik
 	WHERE email = @email and lozinka_hash=@lozinka_hash)
-	Return 1   /*znaci vec postoji*/
+	Return 1
 	else
 	Insert Into Korisnik(ime_korisnik,prezime_korisnik,lozinka_hash,email,drzava,grad,opstina,postanski_br,adresa,tip_korisnik_id,pol)
 	Values(@ime_korisnik,@prezime_korisnik,@lozinka_hash,@email,@drzava,@grad,@opstina,@postanski_br,@adresa,@tip_korisnik_id,@pol)
@@ -185,7 +185,7 @@ AS
 SET LOCK_TIMEOUT 3000;
 BEGIN TRY
 	IF EXISTS(SELECT TOP 1 email FROM Korisnik
-	WHERE email = @email and lozinka_hash=@loz and tip_korisnik_id = 1)
+	WHERE email = @email and lozinka_hash=@loz and tip_korisnik_id=1)
 	Begin
 	RETURN 0
 	end
