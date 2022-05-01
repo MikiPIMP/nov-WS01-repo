@@ -21,7 +21,7 @@ kategorija_ime nvarchar(100)
 
 Create table StatusArtikla (
 statusArtikla_id int Primary Key identity(1,1),
-is_vidljivo BIT default(0)
+is_vidljivo nvarchar(2)
 )
 
 
@@ -35,7 +35,7 @@ Create table Porudzbina (
 porudzbina_id INT PRIMARY KEY identity(1,1),
 korisnik_id INT not null,
 artikal_id INT not null,
-is_zavrseno BIT DEFAULT (0),
+is_zavrseno nvarchar(2),
 vreme_porudzbina DATETIME NOT NULL,
 kolicina_kupovine INT NOT NULL
 )
@@ -59,7 +59,7 @@ pol nvarchar(10) not null check (pol in('Musko', 'Zensko'))
 
 Create table TipKorisnik (
 tip_korisnik_id int Primary Key identity(1,1),
-is_administrator BIT DEFAULT (0)
+is_administrator nvarchar(2)
 )
 
 
@@ -136,7 +136,7 @@ Create PROC Korisnik_Insert
 @opstina nvarchar(100),
 @postanski_br int,
 @adresa nvarchar(255),
-@tip_korisnik_id BIT,
+@tip_korisnik_id nvarchar(2),
 @pol nvarchar(10)
 AS
 SET LOCK_TIMEOUT 3000;
@@ -155,12 +155,7 @@ BEGIN CATCH
 END CATCH
 GO
 
-/*Provera*/
-GO
-exec Korisnik_Insert 'Alek','Gera','12345','gera.alek@prvabeogim','Srbija','Beograd',N'Čukarica',11000,'Cara Dusan 61',1,'Musko'
-Select * from Korisnik
-GO
-/**/
+
 
 /*Nova procedura*/
 GO
@@ -174,7 +169,7 @@ BEGIN CATCH
 END CATCH
 GO
 
-exec Korisnici_Svi
+
 /**/
 
 GO
@@ -347,7 +342,7 @@ BEGIN CATCH
 END CATCH
 GO
 
-exec Artikal_Svi
+
 
 /* ----------------------Tabela Kategorija -------------------- */
 GO
@@ -436,12 +431,12 @@ BEGIN CATCH
 END CATCH
 GO
 
-exec Kategorija_Svi
+
 
 /* ---------------------- Tabela StatusArtikla -------------------- */
 GO
 Create PROC dbo.StatusArtikla_Status
-@is_vidljivo BIT
+@is_vidljivo nvarchar(2)
 AS
 SET LOCK_TIMEOUT 3000;
 BEGIN TRY
@@ -460,7 +455,7 @@ GO
 
 GO
 CREATE PROC StatusArtikla_Insert
-@is_vidljivo BIT
+@is_vidljivo nvarchar(2)
 AS
 SET LOCK_TIMEOUT 3000;
 BEGIN TRY
@@ -481,7 +476,7 @@ GO
 GO
 Create PROC StatusArtikla_Update
 @statusArtikla_id int,
-@is_vidljivo BIT
+@is_vidljivo nvarchar(2)
 AS
 SET LOCK_TIMEOUT 3000;
 
@@ -524,8 +519,6 @@ BEGIN CATCH
 	RETURN @@ERROR;
 END CATCH
 GO
-
-exec StatusArtikla_Svi
 
 
 /* ---------------------- Tabela Slika ---------------------- */
@@ -615,7 +608,7 @@ BEGIN CATCH
 END CATCH
 GO
 
-exec Slika_Svi
+
 
 
 /* ---------------------- Tabela Porudzbina ---------------------- */
@@ -643,7 +636,7 @@ GO
 CREATE PROC Porudzbina_Insert
 @korisnik_id INT,
 @artikal_id INT,
-@is_zavrseno BIT,
+@is_zavrseno nvarchar(2),
 @vreme_porudzbina DATETIME,
 @kolicina_kupovine INT
 AS
@@ -668,7 +661,7 @@ Create PROC Porudzbina_Update
 @porudzbina_id INT,
 @korisnik_id INT,
 @artikal_id INT,
-@is_zavrseno BIT,
+@is_zavrseno nvarchar(2),
 @vreme_porudzbina DATETIME,
 @kolicina_kupovine INT
 AS
@@ -714,12 +707,12 @@ BEGIN CATCH
 END CATCH
 GO
 
-exec Porudzbina_Svi
+
 
 /* ---------------------- Tabela TipKorisnik ---------------------- */
 GO
 Create PROC dbo.TipKorisnik_Korisnik
-@is_administrator BIT
+@is_administrator nvarchar(2)
 AS
 SET LOCK_TIMEOUT 3000;
 BEGIN TRY
@@ -738,7 +731,7 @@ GO
 
 GO
 CREATE PROC TipKorisnik_Insert
-@is_administrator BIT
+@is_administrator nvarchar(2)
 AS
 SET LOCK_TIMEOUT 3000;
 BEGIN TRY
@@ -760,7 +753,7 @@ GO
 GO
 Create PROC TipKorisnik_Update
 @tip_korisnik_id int,
-@is_administrator BIT 
+@is_administrator nvarchar(2) 
 AS
 SET LOCK_TIMEOUT 3000;
 
@@ -804,6 +797,33 @@ BEGIN CATCH
 END CATCH
 GO
 
+/*---------------------------------------------------------*/
+
+
+exec Artikal_Svi
+
+exec Kategorija_Svi
+
+exec StatusArtikla_Svi
+
 exec TipKorisnik_Svi
+
+
+exec Korisnik_Insert 'Milan','Minic','12345','milan.minic@prvabeogim','Srbija','Beograd','Stari grad',11000,'Bul desp Stef', 1,'Musko'
+
+exec Korisnik_Insert 'Ognjen','Bozic','12345','ognjen.bozic@prvabeogim','Srbija','Beograd','Stari grad',11000,'NBGD', 2,'Musko'
+
+exec Korisnik_Insert 'Dunja','Bozinovic','12345','dunja.bozinovic@prvabeogim','Srbija','Beograd','Stari grad',11000,'Bul desp Stef', 2,'Zensko'
+
+exec Korisnik_Insert 'Ilija','Popovic','12345','ilija.popovic@prvabeogim','Srbija','Beograd','Stari grad',11000,'NBGD', 1,'Musko'
+
+
+exec Porudzbina_Svi
+
+exec Korisnici_Svi
+
+exec Slika_Svi
+
+Select * from Korisnik
 
 Select * from Artikal
