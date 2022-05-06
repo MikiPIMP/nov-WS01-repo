@@ -1,6 +1,9 @@
-.vs
-.vscode
 WebShop/.vs
 WebShop/.vscode
+WebShop/WebShop/.vs
+WebShop/WebShop/.vscode
+WebShop/WebShop/bin
+WebShop/WebShop/obj
+#---------------------------
 WebShop/bin
 WebShop/obj
